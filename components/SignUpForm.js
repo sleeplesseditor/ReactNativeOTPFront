@@ -3,19 +3,19 @@ import { Text, View } from 'react-native';
 import { Button, FormInput, FormLabel} from 'react-native-elements';
 import axios from 'axios';
 
-//Enter URL for Firebase Cloud Functions for Project
+//Enter URL for Firebase Cloud Functions Project
 const ROOT_URL = '';
 
 class SignUpForm extends Component {
     state = { phone: '' };
 
-    handleSubmit = () => {
-        axios.post(`${ROOT_URL}/createUser`, {
-            phone: this.state.phone
-        })
-            .then(() => {
-                axios.post(`${ROOT_URL}/requestOneTimePassword`, { phone: this.state.phone })
-            })
+    handleSubmit = async () => {
+        try {
+            await axios.post(`${ROOT_URL}/createUser`, { phone: this.state.phone })
+            await axios.post(`${ROOT_URL}/requestOneTimePassword`, { phone: this.state.phone })
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     render() {
