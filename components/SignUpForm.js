@@ -1,16 +1,34 @@
 import React, { Component } from 'react';
 import { Text, View } from 'react-native';
 import { Button, FormInput, FormLabel} from 'react-native-elements';
+import axios from 'axios';
+
+//Enter URL for Firebase Cloud Functions for Project
+const ROOT_URL = '';
 
 class SignUpForm extends Component {
+    state = { phone: '' };
+
+    handleSubmit = () => {
+        axios.post(`${ROOT_URL}/createUser`, {
+            phone: this.state.phone
+        })
+            .then(() => {
+                axios.post(`${ROOT_URL}/requestOneTimePassword`, { phone: this.state.phone })
+            })
+    }
+
     render() {
         return (
             <View>
                 <View style={{ marginBottom: 10 }}>
                     <FormLabel>Enter Phone Number</FormLabel>
-                    <FormInput />
+                    <FormInput 
+                        value={this.state.phone}
+                        onChangeText={phone => this.setState({ phone })}
+                    />
                 </View>
-                <Button title="Submit" />
+                <Button onPress={this.handleSubmit} title="Submit" />
             </View>
         );
     }
